@@ -9,13 +9,16 @@ import com.badlogic.gdx.math.Vector2;
  */
 
 public class gameObject {
-    static Sprite s;
-    static Vector2 v;
-    static float radius;
+    //Declaration of Object
+    private Sprite s;
+    private Vector2 v;
+    private float radius;
 
-    static Texture dogImg = new Texture("dog.png");
-    static  Texture fruitImg = new Texture("apple.png");
+    //Load Dog and Apple Image
+    private Texture dogImg = new Texture("dog.png");
+    private Texture fruitImg = new Texture("apple.png");
 
+    //Object Instance
     public gameObject(String name,int x,int y){
         if(name.equals("dog")){
             s = new Sprite(dogImg);
@@ -27,21 +30,22 @@ public class gameObject {
         radius = 1f;
     }
 
-    static Sprite getSprite(){
+    Sprite getSprite(){
         return s;
     }
-
-    static void setPosition(int x, int y){
+    void setPosition(int x, int y){
         v.set(x,y);
     }
-    static int getPosX(){
+    int getPosX(){
         return (int)v.x;
     }
-    static int getPosY(){
+    int getPosY(){
         return (int)v.y;
     }
-    static boolean checkCollide()
+    boolean checkApple()
     {
-        return true;
+        if(getPosY()<0)
+            return true;
+        return false;
     }
 }

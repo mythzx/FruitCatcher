@@ -29,16 +29,13 @@ class gameSetting {
     //Initialize Player setting
     static int HP = 3;
     static int score = 0;
+    static int appleTimer = 0;
 
     //Initialize to original game state
     static void reset() {
         HP = 3;
         score = 0;
+        appleTimer = 0;
         gameState = "active";
-    }
-
-    //Initialize to fruit state
-    static void fruitReset() {
-        Fruit_POS_Y = VIEWPORT_HEIGHT - 400;
     }
 }
