@@ -9,7 +9,7 @@ import com.mystic.game.MyGdxGame;
 
 public class AndroidLauncher extends AndroidApplication {
 
-	static GlobalController c;
+	public static GlobalController c;
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
@@ -21,10 +21,15 @@ public class AndroidLauncher extends AndroidApplication {
 				startActivity(new Intent(getBaseContext(), MainActivity.class));
 				//AndroidLauncher.super.finish();
 			}
+			@Override
 			public void setScore(int s){
-
+				score = s;
 			}
 		};
 		initialize(new MyGdxGame(c), config);
+	}
+
+	public static int getScore() {
+		return c.score;
 	}
 }

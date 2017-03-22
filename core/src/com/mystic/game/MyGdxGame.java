@@ -1,7 +1,6 @@
 package com.mystic.game;
 
 //Core Library
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 
@@ -20,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 //Graphical library
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.Color;
@@ -36,8 +34,6 @@ import java.util.List;
 
 //Random Generator Library
 import java.util.Random;
-
-import javax.swing.text.View;
 
 /**
  * Created by Gavin
@@ -134,12 +130,11 @@ public class MyGdxGame extends ApplicationAdapter {
         //For Extreme cases -  Chaos mode activated
         //Stage and Listener
         stageMain = new Stage();
-        //Viewport view = new FitViewport(gameSetting.VIEWPORT_WIDTH,gameSetting.VIEWPORT_HEIGHT);
         stageMain.setViewport(viewport);
 
         // Layout Button Control
         tableControl = new Table();
-        //tableControl.bottom();
+        tableControl.bottom();
 
         btnLeft = new TextButton("Left", textButtonStyle);
         btnLeft.addListener(new ChangeListener() {
@@ -184,7 +179,7 @@ public class MyGdxGame extends ApplicationAdapter {
         btnEnd.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                gc.score = gameSetting.score;
+                gc.setScore(gameSetting.score);
                 gc.move();
             }
         });
@@ -202,7 +197,6 @@ public class MyGdxGame extends ApplicationAdapter {
         btnEnd.setVisible(false);
         btnRestart.setVisible(false);
         stage.addActor(table);
-
     }
 
     @Override
@@ -279,7 +273,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
             stageMain.draw(); // Enable for buttons on game page
 
-
             //Check Hp = 0 to see if GAME OVER
             if (gameSetting.HP == 0) {
                 gameSetting.gameState = "over";
@@ -292,17 +285,15 @@ public class MyGdxGame extends ApplicationAdapter {
 
         //Game over state
         if (gameSetting.gameState.equals("over")) {
+            btnRestart.setVisible(true);
+            btnEnd.setVisible(true);
             Gdx.input.setInputProcessor(stage);
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             batch.begin();
             batch.draw(bg, 0, 0, gameSetting.VIEWPORT_WIDTH, gameSetting.VIEWPORT_HEIGHT);
-            font.draw(batch, "Game over", 0, 0);
-            lbScore.setText(Integer.toString(gameSetting.score));
-            btnRestart.setVisible(true);
-            btnEnd.setVisible(true);
-            stage.draw();
             batch.end();
+            stage.draw();
         }
     }
 }

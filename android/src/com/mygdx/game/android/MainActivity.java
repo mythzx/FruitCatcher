@@ -18,8 +18,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //textView = (TextView) findViewById(R.id.lblValue);
-        //textView.setText(AndroidLauncher.c.score);
+        textView = (TextView) findViewById(R.id.lblValue);
+        textView.setText(Integer.toString(AndroidLauncher.getScore()));
         Log.d("test",Integer.toString(AndroidLauncher.c.score));
     }
 }
