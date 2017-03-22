@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 //Graphical library
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.Color;
@@ -36,10 +37,14 @@ import java.util.List;
 //Random Generator Library
 import java.util.Random;
 
+import javax.swing.text.View;
+
 /**
  * Created by Gavin
  */
 public class MyGdxGame extends ApplicationAdapter {
+
+    GlobalController gc;
 
     //Initialize Font creator, with Different Font
     private BitmapFont font;
@@ -66,6 +71,10 @@ public class MyGdxGame extends ApplicationAdapter {
     //Initialize Game Object
     private List<gameObject> gameObjects = new ArrayList<gameObject>();
 
+    public MyGdxGame(GlobalController c) {
+        gc = c;
+    }
+
     private void init() { // Load Player
         gameObject dog = new gameObject("dog", gameSetting.PLAYER_POS_X, gameSetting.PLAYER_POS_Y);
         gameObjects.add(dog);
@@ -86,7 +95,9 @@ public class MyGdxGame extends ApplicationAdapter {
                 gameObject apple2 = new gameObject("apple", gameSetting.Fruit_POS_X3, gameSetting.Fruit_POS_Y);
                 gameObjects.add(apple2);
                 break;
+
         }
+        Gdx.app.log("Test", Integer.toString(gameSetting.Fruit_POS_Y));
     }
 
     @Override
@@ -123,11 +134,12 @@ public class MyGdxGame extends ApplicationAdapter {
         //For Extreme cases -  Chaos mode activated
         //Stage and Listener
         stageMain = new Stage();
+        //Viewport view = new FitViewport(gameSetting.VIEWPORT_WIDTH,gameSetting.VIEWPORT_HEIGHT);
+        stageMain.setViewport(viewport);
 
         // Layout Button Control
         tableControl = new Table();
-        tableControl.bottom();
-        tableControl.setCullingArea(new Rectangle(0,0,100,100));
+        //tableControl.bottom();
 
         btnLeft = new TextButton("Left", textButtonStyle);
         btnLeft.addListener(new ChangeListener() {
@@ -172,7 +184,8 @@ public class MyGdxGame extends ApplicationAdapter {
         btnEnd.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                gameSetting.reset();
+                gc.score = gameSetting.score;
+                gc.move();
             }
         });
         // Adding Elements to table layout
@@ -237,7 +250,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 } else if (accelX < -4f) {//Accel Turn Right
                     gameSetting.PLAYER_POS_X = gameSetting.pos3;
                     gameObjects.get(0).setPosition(gameSetting.PLAYER_POS_X, gameSetting.PLAYER_POS_Y);
-                } else {
+                } else if (accelX < 1f && accelX > -1f) {
                     gameSetting.PLAYER_POS_X = gameSetting.pos2;
                     gameObjects.get(0).setPosition(gameSetting.PLAYER_POS_X, gameSetting.PLAYER_POS_Y);
                 }
@@ -260,13 +273,21 @@ public class MyGdxGame extends ApplicationAdapter {
             for (int i = 0; i < gameObjects.size(); i++) {
                 batch.draw(gameObjects.get(i).getSprite(), gameObjects.get(i).getPosX(), gameObjects.get(i).getPosY());
             }
-            //stageMain.draw(); // Enable for buttons on game page
 
             //End of Graphic Rendering
             batch.end();
+
+            stageMain.draw(); // Enable for buttons on game page
+
+
             //Check Hp = 0 to see if GAME OVER
-            if (gameSetting.HP == 0)
+            if (gameSetting.HP == 0) {
                 gameSetting.gameState = "over";
+                for (int i = 1; i < gameObjects.size(); i++) {
+                    gameObjects.remove(i);
+                }
+            }
+
         }
 
         //Game over state
